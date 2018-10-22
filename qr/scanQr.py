@@ -1,48 +1,46 @@
 #!/usr/bin/python
 
+#this file looks in the src folder for image files and looks for
+#a QR code to decode
+#!/usr/bin/python
 
 #linux install:
 #sudo apt-get install libzbar-dev
 #pip install zbar
 #pip install pypdf2
+#pip install pyzbar (for python3)
 
+#sudo pip3 install zbar-py
 
 from sys import argv
-import zbar
 import os
 import sys
-from PIL import Image
-
+import pyzbar.pyzbar as pyzbar
+from PyPDF2 import PdfFileReader, PdfFileWriter
 
 #this file looks in the src folder for image files and looks for
-#a QR code to decode
-scanner = zbar.ImageScanner()
-scanner.parse_config('enable')
 
-for file in os.listdir('src'):
-     pil_img = Image.open('src/' + file).convert('L')
+from pdf2image import convert_from_bytes
 
-     width, height=pil_img.size
-     raw = pil_img.tobytes()
+#convert to images
+pdfPages = PdfFileReader('src/test.pdf')
+pages = convert_from_bytes(open('test.pdf', 'rb').read())
+writer = PdfFileWriter()
 
-     image=zbar.Image(width, height, 'Y800', raw)
+i = 0
+for page in pages:
+     val = pyzbar.decode(page)
+     if val != []:
+          if i != 0:
+               with open('output' + str(i) + '.pdf','wb') as outfile:
+                    writer.write(outfile)
+          writer = PdfFileWriter()
+          writer.addPage(pdfPages.getPage(i))
+     else:
+          writer.addPage(pdfPages.getPage(i))
+     i += 1
 
-     #scan the image for barcodes
-     scanner.scan(image)
-     #get decoded strings
-     decoded_strings = []
-     i = 0
-     for result in image:
-          decoded_strings.append(result.data)
-
-     if len(decoded_strings) == 0:
-          print('could not find QR code in ' + file)
-     else:    
-          print('found ' + str(len(decoded_strings)) + ' qr code(s) in ' + file)
-          for string in decoded_strings:
-               print(string)
-
-     print("")
-     del(image)
+with open('output' + str(i) + '.pdf','wb') as outfile:
+     writer.write(outfile)
 
 sys.exit
