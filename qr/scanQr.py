@@ -1,17 +1,10 @@
 #!/usr/bin/python
 
-#this file looks in the src folder for image files and looks for
-#a QR code to decode
-#!/usr/bin/python
-
-#linux install:
-#sudo apt-get install libzbar-dev
-#pip install zbar
-#pip install pypdf2
-#pip install pyzbar (for python3)
-
-#sudo pip3 install zbar-py
-
+#sudo apt-get install libzbar0
+#sudo apt-get install python-poppler    (might need this?)
+#pip3 install pyzbar
+#pip3 install pdf2imgage
+#
 from sys import argv
 import os
 import sys
@@ -28,10 +21,13 @@ pages = convert_from_bytes(open('test.pdf', 'rb').read())
 writer = PdfFileWriter()
 
 i = 0
+output = []
 for page in pages:
      val = pyzbar.decode(page)
      if val != []:
+          data = val[0][0]
           if i != 0:
+               output.append(data)
                with open('output' + str(i) + '.pdf','wb') as outfile:
                     writer.write(outfile)
           writer = PdfFileWriter()
@@ -42,5 +38,9 @@ for page in pages:
 
 with open('output' + str(i) + '.pdf','wb') as outfile:
      writer.write(outfile)
+output.append(data)
+
+for name in output:
+     print(name)
 
 sys.exit
