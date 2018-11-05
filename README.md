@@ -1,17 +1,37 @@
 # QR-code
-helper scripts to test out QR code development
+Given a PDF, split into smaller PDFs by a QR code. <br>
+Written in python using the Zbar library
 
 Things needed:
-zbar:
      
-     linux
-     sudo apt-get install libzbar-dev
-     
-     mac
-     brew install zbar (i don't have a mac so not sure if this works)
+     linux:
+     sudo apt-get install libzbar0
 
      Then
-     pip install zbar
-     pip install qrcode
+     pip3 install zbar
+     pip3 install pyzbar
+     pip3 install Py2PDF
+     pip3 install pdf2image
+Zbar and pyzbar must both be installed since pyzbar is a python wrapper that requires the DLLs from zbar
 
-Also uses python image library (i think that comes be default tho)
+(Optional for generating QR codes)
+		
+	pip3 install qrcode	
+	pip3 install Pillow  	 
+
+## Usage
+In a terminal:
+	
+	python3 scanQr.py
+
+The script will then take the PDF named `test.pdf` and dump the split PDFs into the `output` folder
+
+## Generating QR codes
+
+For making PDF's with QR codes, a qr code can be generated from a string using the `generateQr.py` script<br>
+Run by:
+
+	python3 generateQr.py
+
+Then enter a string after the promp and a qr code image will be made in the `output` folder	
+
