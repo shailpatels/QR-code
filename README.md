@@ -7,8 +7,6 @@ Things needed:
      linux:
      sudo apt-get install libzbar0
 
-     Then
-     pip3 install zbar
      pip3 install pyzbar
      pip3 install Py2PDF
      pip3 install pdf2image
