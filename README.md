@@ -4,7 +4,6 @@ Written in python using the Zbar library
 
 Things needed:
      
-     linux:
      sudo apt-get install libzbar0
 
      pip3 install pyzbar
